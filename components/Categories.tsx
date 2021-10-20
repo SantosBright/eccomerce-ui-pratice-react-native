@@ -47,6 +47,7 @@ const Categories = () => {
 export default Categories;
 
 const styles = StyleSheet.create({
+  container: {},
   heading: {
     fontSize: 30,
     fontWeight: '300',
