@@ -3,7 +3,7 @@ import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
 import TrendingItem from './TrendingItem';
 import { trendingData } from '../data';
 
-const Trending = ({navigation }) => {
+const Trending = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Trending</Text>
@@ -15,7 +15,7 @@ const Trending = ({navigation }) => {
           marginBottom: 15,
         }}
         keyExtractor={item => new Date().toString() + item.heading}
-        renderItem={({ item }) => <TrendingItem navigation={navigation } item={item} />}
+        renderItem={({ item }) => <TrendingItem item={item} />}
       />
     </View>
   );
