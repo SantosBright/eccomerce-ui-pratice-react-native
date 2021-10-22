@@ -41,6 +41,7 @@ export default function App() {
               position: '',
               shadowOpacity: 0,
             },
+            headerTitle: '',
             headerRight: () => (
               <TouchableNativeFeedback
                 onPress={() => navigation.navigate('Cart')}
