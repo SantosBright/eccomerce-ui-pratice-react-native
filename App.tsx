@@ -1,12 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TouchableNativeFeedback,
+  Image,
+} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/core';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import HomeScreen from './screens/HomeScreen';
 import SingleProductScreen from './screens/SingleProductScreen';
+import CartScreen from './screens/CartScreen';
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -23,7 +32,34 @@ export default function App() {
     <NavigationContainer>
       <Navigator>
         <Screen name='Home' component={HomeScreen} />
-        <Screen name='Single' component={SingleProductScreen} />
+        <Screen
+          name='Single'
+          options={({ navigation }) => ({
+            headerStyle: {
+              backgroundColor: 'rgba(0, 0, 0, 0)',
+              elevation: 0,
+              position: '',
+              shadowOpacity: 0,
+            },
+            headerRight: () => (
+              <TouchableNativeFeedback
+                onPress={() => navigation.navigate('Cart')}
+              >
+                <Image source={require('./assets/cart.png')} />
+              </TouchableNativeFeedback>
+            ),
+          })}
+          component={SingleProductScreen}
+        />
+        <Screen
+          name='Cart'
+          options={{
+            headerStyle: {
+              display: 'none',
+            },
+          }}
+          component={CartScreen}
+        />
       </Navigator>
     </NavigationContainer>
   ) : (

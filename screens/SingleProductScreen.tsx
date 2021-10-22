@@ -6,6 +6,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
@@ -20,7 +21,10 @@ const SingleProductScreen = (props: Props) => {
       <View>
         <View>
           <Image
-            style={{ height: 665 }}
+            style={{
+              height: Dimensions.get('window').height * 0.7,
+              minHeight: 555,
+            }}
             height={665}
             source={require('../assets/images/detail.png')}
           />
