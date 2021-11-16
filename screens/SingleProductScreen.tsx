@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  TouchableNativeFeedbackBase,
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
@@ -18,18 +19,17 @@ const SingleProductScreen = (props: Props) => {
 
   return (
     <ScrollView>
-      <View>
+      <View style={{ backgroundColor: '#F2F2F2' }}>
         <View>
           <Image
-            style={{
-              height: Dimensions.get('window').height * 0.7,
-              minHeight: 555,
-            }}
-            height={665}
+            resizeMode='contain'
             source={require('../assets/images/detail.png')}
           />
         </View>
         <View style={styles.textContainer}>
+          <TouchableOpacity style={styles.likeBtn}>
+            <Image source={require('../assets/like.png')} />
+          </TouchableOpacity>
           <Text style={styles.price}>$55.25</Text>
           <Text style={styles.title}>
             Nike F.C. Women's Tie-Dye Football Shirt
@@ -77,9 +77,22 @@ const styles = StyleSheet.create({
   textContainer: {
     padding: 15,
     paddingVertical: 20,
+    position: 'relative',
+    backgroundColor: 'white',
   },
   buttonText: {
     color: '#FFFFFF',
     textAlign: 'center',
+  },
+  likeBtn: {
+    backgroundColor: 'white',
+    width: 58,
+    height: 58,
+    borderRadius: 58 / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 30,
+    top: -(58 / 2),
   },
 });

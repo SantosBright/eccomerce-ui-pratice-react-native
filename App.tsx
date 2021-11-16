@@ -31,16 +31,21 @@ export default function App() {
   return fontsLoaded ? (
     <NavigationContainer>
       <Navigator>
-        <Screen name='Home' component={HomeScreen} />
+        <Screen
+          name='Home'
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
         <Screen
           name='Single'
           options={({ navigation }) => ({
             headerStyle: {
-              backgroundColor: 'rgba(0, 0, 0, 0)',
+              backgroundColor: '#F2F2F2',
               elevation: 0,
               position: '',
               shadowOpacity: 0,
             },
+            headerShadowVisible: false,
             headerTitle: '',
             headerRight: () => (
               <TouchableNativeFeedback
@@ -54,11 +59,18 @@ export default function App() {
         />
         <Screen
           name='Cart'
-          options={{
-            headerStyle: {
-              display: 'none',
-            },
-          }}
+          options={({ navigation }) => ({
+            headerShadowVisible: false,
+            headerStyle: { backgroundColor: '#F2F2F2' },
+            headerTitle: '',
+            headerBackTitle: '',
+
+            headerRight: () => (
+              <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+                <Image source={require('./assets/cancel.png')} />
+              </TouchableNativeFeedback>
+            ),
+          })}
           component={CartScreen}
         />
       </Navigator>

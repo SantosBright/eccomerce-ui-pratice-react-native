@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 25,
     marginVertical: 20,
+    marginTop: 50,
     fontFamily: 'barlow-regular',
   },
   scrollContainer: {
