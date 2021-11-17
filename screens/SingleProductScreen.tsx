@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -7,38 +7,58 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  TouchableNativeFeedbackBase,
+  Alert,
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
 interface Props {}
 
+interface Product {
+  id: number;
+  category: string;
+  description: string;
+  image: string;
+  price: number;
+  title: string;
+}
+
 const SingleProductScreen = (props: Props) => {
-  // const route = useRoute();
-  // const { itemId } = route.params;
+  const route = useRoute();
+  const { itemId } = route.params;
+  const [product, setProduct] = useState<Product>({});
+
+  const getProduct = async () => {
+    try {
+      const res = await fetch(`https://fakestoreapi.com/products/${itemId}`);
+      setProduct(await res.json());
+    } catch (error: any) {
+      Alert.alert(
+        error.response ? error.response.data.message : 'Something went wrong'
+      );
+    }
+  };
+
+  useEffect(() => {
+    getProduct();
+  }, []);
 
   return (
     <ScrollView>
       <View style={{ backgroundColor: '#F2F2F2' }}>
         <View>
           <Image
+            height={Dimensions.get('window').height * 0.6}
             resizeMode='contain'
-            source={require('../assets/images/detail.png')}
+            source={{ uri: product?.image }}
           />
         </View>
         <View style={styles.textContainer}>
           <TouchableOpacity style={styles.likeBtn}>
             <Image source={require('../assets/like.png')} />
           </TouchableOpacity>
-          <Text style={styles.price}>$55.25</Text>
-          <Text style={styles.title}>
-            Nike F.C. Women's Tie-Dye Football Shirt
-          </Text>
-          <Text style={styles.description}>
-            The Nike F.C. Shirt blends 2 summer favourites: festivals and
-            football. Soft, sweat-wicking fabric and a mesh racerback help you
-            stay comfortable on the pitch or in the crowd.
-          </Text>
+          <Text style={styles.price}>${product?.price}</Text>
+          <Text style={styles.title}>{product.title}</Text>
+          <Text style={styles.description}>{product.description}</Text>
           <TouchableOpacity activeOpacity={0.8} style={styles.button}>
             <Text style={styles.buttonText}>Add To Bag</Text>
           </TouchableOpacity>
