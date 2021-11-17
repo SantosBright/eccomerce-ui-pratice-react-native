@@ -9,28 +9,41 @@ import {
   Dimensions,
 } from 'react-native';
 
-type Props = {
-  item: {
-    imageUrl: string;
-    heading: string;
-    price: number;
-    id: number;
-  };
-};
+interface Product {
+  id: number;
+  category: string;
+  description: string;
+  image: string;
+  price: number;
+  title: string;
+}
 
-const TrendingItem = ({ item }: Props) => {
+interface TrendingItemProps {
+  item: Product;
+}
+
+const TrendingItem = ({ item }: TrendingItemProps) => {
   const navigation = useNavigation();
+
+  const truncateStr = (str: string): string => {
+    if (str.length > 20) {
+      str = str.substring(0, 17) + '...';
+    }
+    return str;
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => navigation.navigate('Single', { itemId: item.id })}
       >
         <Image
+          resizeMode='contain'
           style={styles.image}
-          source={require('../assets/images/product-2.png')}
+          source={{ uri: item.image }}
         />
       </TouchableOpacity>
-      <Text style={styles.title}>{item.heading}</Text>
+      <Text style={styles.title}>{truncateStr(item.title)}</Text>
       <Text style={styles.price}>${item.price}</Text>
     </View>
   );

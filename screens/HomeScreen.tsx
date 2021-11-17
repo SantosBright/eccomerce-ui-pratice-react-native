@@ -1,14 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
 import Categories from '../components/Categories';
 import Trending from '../components/Trending';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
+  const [loading, setloading] = useState(true);
+  const [products, setProduct] = useState([]);
+
+  const getProducts = async () => {
+    const res = await fetch('https://fakestoreapi.com/products');
+    setProduct(await res.json());
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <Categories />
-      <Trending navigation={navigation} />
+      <Trending products={products} />
     </ScrollView>
   );
 }
