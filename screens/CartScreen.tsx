@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   TouchableNativeFeedback,
@@ -7,25 +7,50 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  AsyncStorage,
+  Alert,
 } from 'react-native';
 import CartCard from '../components/CartCard';
+import { cartContext } from '../context/cartContext';
 import { cartData } from '../data';
+import cartReducer from '../reducer/cart';
 
 interface Props {}
 
 const CartScreen = (props: Props) => {
+  const { disptachToCart, cartProducts } = useContext(cartContext);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    cartProducts.forEach(item => {
+      setTotal(prev => prev + Math.floor(item.price * item.quantity));
+    });
+  }, [cartProducts]);
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.heading}>Cart</Text>
-        <FlatList data={cartData} renderItem={() => <CartCard />} />
+        <FlatList
+          data={cartProducts}
+          renderItem={({ item }) => <CartCard product={item} />}
+        />
       </View>
       <View style={styles.totalContainer}>
         <View style={styles.totalHead}>
           <Text style={styles.totalHeading}>Total</Text>
-          <Text style={styles.price}>$150</Text>
+          <Text style={styles.price}>${total}</Text>
         </View>
-        <TouchableOpacity activeOpacity={0.8} style={styles.checkoutBtn}>
+        <TouchableOpacity
+          onPress={async () => {
+            await AsyncStorage.clear();
+            disptachToCart({ type: 'CLEAR_PRODUCTS' });
+            setTotal(0);
+            Alert.alert('Cart has been clear');
+          }}
+          activeOpacity={0.8}
+          style={styles.checkoutBtn}
+        >
           <Text style={styles.btnText}>Checkout</Text>
         </TouchableOpacity>
       </View>

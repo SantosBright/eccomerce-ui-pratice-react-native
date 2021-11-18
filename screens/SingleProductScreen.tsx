@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -10,32 +10,39 @@ import {
   Alert,
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { cartContext } from '../context/cartContext';
+import { Product } from '../reducer/cart';
 
 interface Props {}
-
-interface Product {
-  id: number;
-  category: string;
-  description: string;
-  image: string;
-  price: number;
-  title: string;
-}
 
 const SingleProductScreen = (props: Props) => {
   const route = useRoute();
   const { itemId } = route.params;
   const [product, setProduct] = useState<Product>({});
+  const [loading, setLoading] = useState(true);
+  const { disptachToCart, cartProducts } = useContext(cartContext);
 
   const getProduct = async () => {
     try {
       const res = await fetch(`https://fakestoreapi.com/products/${itemId}`);
       setProduct(await res.json());
+      setLoading(false);
     } catch (error: any) {
       Alert.alert(
         error.response ? error.response.data.message : 'Something went wrong'
       );
     }
+  };
+
+  const addToCart = () => {
+    disptachToCart({ type: 'ADD_PRODUCT', payload: product });
+    Alert.alert('Product has been added to cart');
+  };
+
+  const subAdd = () => {
+    if (cartProducts.find(item => item.id === itemId)?.quantity === 1)
+      Alert.alert('Product has been remove to cart');
+    disptachToCart({ type: 'SUB_PRODUCT_QUANTITY', payload: product.id });
   };
 
   useEffect(() => {
@@ -59,9 +66,38 @@ const SingleProductScreen = (props: Props) => {
           <Text style={styles.price}>${product?.price}</Text>
           <Text style={styles.title}>{product.title}</Text>
           <Text style={styles.description}>{product.description}</Text>
-          <TouchableOpacity activeOpacity={0.8} style={styles.button}>
-            <Text style={styles.buttonText}>Add To Bag</Text>
-          </TouchableOpacity>
+          {!loading &&
+            (cartProducts.some(item => item.id === product.id) ? (
+              <View style={styles.addSubBtns}>
+                <TouchableOpacity
+                  onPress={subAdd}
+                  activeOpacity={0.8}
+                  style={styles.subBtn}
+                >
+                  <Text style={styles.buttonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={styles.quantity}>
+                  x{cartProducts.find(item => item.id === product.id)?.quantity}
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    disptachToCart({ type: 'ADD_PRODUCT', payload: product })
+                  }
+                  activeOpacity={0.8}
+                  style={styles.addBtn}
+                >
+                  <Text style={styles.buttonText}>+</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity
+                onPress={addToCart}
+                activeOpacity={0.8}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>Add To Bag</Text>
+              </TouchableOpacity>
+            ))}
         </View>
       </View>
     </ScrollView>
@@ -114,5 +150,25 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 30,
     top: -(58 / 2),
+  },
+  addSubBtns: {
+    flexDirection: 'row',
+    marginTop: 15,
+    alignItems: 'center',
+  },
+  subBtn: {
+    flex: 1,
+    backgroundColor: 'black',
+    paddingVertical: 15,
+  },
+  addBtn: {
+    flex: 1,
+    backgroundColor: 'black',
+    paddingVertical: 15,
+  },
+  quantity: {
+    fontSize: 18,
+    marginHorizontal: 20,
+    color: 'rgba(0, 0, 0, 0.5)',
   },
 });

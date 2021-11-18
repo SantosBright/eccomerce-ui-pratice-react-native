@@ -1,9 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
+import { Product } from '../reducer/cart';
 
-interface Props {}
+interface Props {
+  product: Product;
+}
 
-const CartCard = (props: Props) => {
+const CartCard = ({ product }: Props) => {
   return (
     <View style={styles.card}>
       <View style={styles.imageCont}>
@@ -11,19 +14,17 @@ const CartCard = (props: Props) => {
           <Image
             style={styles.image}
             resizeMode='contain'
-            source={require('../assets/images/cart-1.png')}
+            source={{ uri: product.image }}
           />
         </View>
       </View>
       <View style={styles.infoContainer}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>
-            Nike F.C. Women's Tie-Dye Football Shirt
-          </Text>
+          <Text style={styles.title}>{product.title}</Text>
         </View>
         <View style={styles.priceSize}>
-          <Text style={styles.size}>x1</Text>
-          <Text style={styles.price}>$45</Text>
+          <Text style={styles.size}>x{product.quantity}</Text>
+          <Text style={styles.price}>${product.price}</Text>
         </View>
       </View>
     </View>
