@@ -12,6 +12,7 @@ import {
 import { useRoute } from '@react-navigation/native';
 import { cartContext } from '../context/cartContext';
 import { Product } from '../reducer/cart';
+import { ACTIONS, COLORS } from '../constants';
 
 interface Props {}
 
@@ -51,10 +52,14 @@ const SingleProductScreen = (props: Props) => {
 
   return (
     <ScrollView>
-      <View style={{ backgroundColor: '#F2F2F2' }}>
-        <View>
+      <View style={{ backgroundColor: COLORS.defaultBackground }}>
+        <View
+          style={{
+            height: Dimensions.get('window').height * 0.6,
+          }}
+        >
           <Image
-            height={Dimensions.get('window').height * 0.6}
+            style={{ height: '100%', width: '100%' }}
             resizeMode='contain'
             source={{ uri: product?.image }}
           />
@@ -81,7 +86,10 @@ const SingleProductScreen = (props: Props) => {
                 </Text>
                 <TouchableOpacity
                   onPress={() =>
-                    disptachToCart({ type: 'ADD_PRODUCT', payload: product })
+                    disptachToCart({
+                      type: ACTIONS.ADD_PRODUCT,
+                      payload: product,
+                    })
                   }
                   activeOpacity={0.8}
                   style={styles.addBtn}
@@ -126,7 +134,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    backgroundColor: '#000',
+    backgroundColor: COLORS.primaryColor,
     paddingVertical: 15,
     marginTop: 10,
   },
@@ -158,12 +166,12 @@ const styles = StyleSheet.create({
   },
   subBtn: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: COLORS.primaryColor,
     paddingVertical: 15,
   },
   addBtn: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: COLORS.primaryColor,
     paddingVertical: 15,
   },
   quantity: {

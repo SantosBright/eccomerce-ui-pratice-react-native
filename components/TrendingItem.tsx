@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import { SCREEN_NAMES } from '../constants';
 
 interface Product {
   id: number;
@@ -35,13 +36,17 @@ const TrendingItem = ({ item }: TrendingItemProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Single', { itemId: item.id })}
+        onPress={() =>
+          navigation.navigate(SCREEN_NAMES.single, { itemId: item.id })
+        }
       >
-        <Image
-          resizeMode='contain'
-          style={styles.image}
-          source={{ uri: item.image }}
-        />
+        <View style={styles.imageCont}>
+          <Image
+            resizeMode='contain'
+            style={{ height: '100%', width: '100%' }}
+            source={{ uri: item.image }}
+          />
+        </View>
       </TouchableOpacity>
       <Text style={styles.title}>{truncateStr(item.title)}</Text>
       <Text style={styles.price}>${item.price}</Text>
@@ -57,9 +62,8 @@ const styles = StyleSheet.create({
   container: {
     width: width / 2 - 20,
   },
-  image: {
+  imageCont: {
     height: 170,
-    aspectRatio: 1,
   },
   title: {
     fontSize: 14,

@@ -16,6 +16,7 @@ import SingleProductScreen from './screens/SingleProductScreen';
 import CartScreen from './screens/CartScreen';
 import CartProvider from './context/cartContext';
 import cartReducer from './reducer/cart';
+import { ACTIONS, COLORS, SCREEN_NAMES } from './constants';
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -30,7 +31,7 @@ export default function App() {
 
   const getCartLocal = async () => {
     cartDispatch({
-      type: 'SET_PRODUCTS',
+      type: ACTIONS.SET_PRODUCTS,
       payload: JSON.parse(await AsyncStorage.getItem('cart-products')),
     });
   };
@@ -52,15 +53,15 @@ export default function App() {
       <NavigationContainer>
         <Navigator>
           <Screen
-            name='Home'
+            name={SCREEN_NAMES.home}
             component={HomeScreen}
             options={{ headerShown: false }}
           />
           <Screen
-            name='Single'
+            name={SCREEN_NAMES.single}
             options={({ navigation }) => ({
               headerStyle: {
-                backgroundColor: '#F2F2F2',
+                backgroundColor: COLORS.defaultBackground,
                 elevation: 0,
                 position: '',
                 shadowOpacity: 0,
@@ -69,7 +70,7 @@ export default function App() {
               headerTitle: '',
               headerRight: () => (
                 <TouchableNativeFeedback
-                  onPress={() => navigation.navigate('Cart')}
+                  onPress={() => navigation.navigate(SCREEN_NAMES.cart)}
                 >
                   <Image source={require('./assets/cart.png')} />
                 </TouchableNativeFeedback>
@@ -78,10 +79,10 @@ export default function App() {
             component={SingleProductScreen}
           />
           <Screen
-            name='Cart'
+            name={SCREEN_NAMES.cart}
             options={({ navigation }) => ({
               headerShadowVisible: false,
-              headerStyle: { backgroundColor: '#F2F2F2' },
+              headerStyle: { backgroundColor: COLORS.defaultBackground },
               headerTitle: '',
               headerBackTitle: '',
 

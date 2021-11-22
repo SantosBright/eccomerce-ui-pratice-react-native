@@ -1,3 +1,4 @@
+import { ACTIONS } from '../constants';
 export interface Product {
   id: number;
   category: string;
@@ -8,25 +9,27 @@ export interface Product {
   quantity: number;
 }
 
+type ActionType =
+  | 'GET_PRODUCTS'
+  | 'ADD_PRODUCT'
+  | 'GET_PRODUCT'
+  | 'ADD_PRODUCT_QUANTITY'
+  | 'SUB_PRODUCT_QUANTITY'
+  | 'SET_PRODUCTS'
+  | 'CLEAR_PRODUCTS';
+
 export interface CartActionType {
-  type:
-    | 'GET_PRODUCTS'
-    | 'ADD_PRODUCT'
-    | 'GET_PRODUCT'
-    | 'ADD_PRODUCT_QUANTITY'
-    | 'SUB_PRODUCT_QUANTITY'
-    | 'SET_PRODUCTS'
-    | 'CLEAR_PRODUCTS';
+  type: ActionType;
   payload: Product | number | Product[];
 }
 
 function cartReducer(state: Product[], action: CartActionType) {
   switch (action.type) {
-    case 'GET_PRODUCTS':
+    case ACTIONS.GET_PRODUCTS:
       return state;
-    case 'SET_PRODUCTS':
+    case ACTIONS.SET_PRODUCTS:
       return action.payload;
-    case 'ADD_PRODUCT':
+    case ACTIONS.ADD_PRODUCT:
       let product = state.find(item => item.id === action.payload.id);
       if (!!product) {
         return state.map(item =>
@@ -37,9 +40,9 @@ function cartReducer(state: Product[], action: CartActionType) {
       } else {
         return [...state, { ...(<Product>action.payload), quantity: 1 }];
       }
-    case 'GET_PRODUCT':
+    case ACTIONS.GET_PRODUCT:
       return state.find(item => item.id === action.payload.id);
-    case 'SUB_PRODUCT_QUANTITY':
+    case ACTIONS.SUB_PRODUCT_QUANTITY:
       let foundProduct = state.find(item => item.id === action.payload);
       if (foundProduct?.quantity === 1) {
         return state.filter(item => item.id !== action.payload);
@@ -49,7 +52,7 @@ function cartReducer(state: Product[], action: CartActionType) {
           ? { ...item, quantity: item.quantity - 1 }
           : item
       );
-    case 'CLEAR_PRODUCTS':
+    case ACTIONS.CLEAR_PRODUCTS:
       return [];
     default:
       return state;

@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import CartCard from '../components/CartCard';
+import { COLORS } from '../constants';
 import { cartContext } from '../context/cartContext';
 import { cartData } from '../data';
 import cartReducer from '../reducer/cart';
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 20,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: COLORS.defaultBackground,
   },
   totalContainer: {
     backgroundColor: 'white',
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   checkoutBtn: {
-    backgroundColor: 'black',
+    backgroundColor: COLORS.primaryColor,
     paddingVertical: 10,
     marginTop: 10,
   },
